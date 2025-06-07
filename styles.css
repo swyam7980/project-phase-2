@@ -341,6 +341,11 @@ nav ul li a:hover {
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
 }
 
+footer p{
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+}
 /* Dark Mode Styles */
 body.dark {
   background-color: #1e1e28;
@@ -403,4 +408,62 @@ body.dark .secondary:hover {
     flex-direction: row;
     align-items: center;
     gap: 16px;
+}
+
+/*developers section*/
+.developers-section {
+  padding: 0.5rem;
+  color: white;
+  text-align: center;
+  background: linear-gradient(135deg, #1e1b2e, #3b3450, #d8d0e3); /* Default for dark */
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+.developers-grid {
+  display:inline-grid;
+  grid-template-columns: repeat(4,0fr);
+  gap: 2rem;
+  margin-top: 0.5rem;
+}
+.developer-card {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  padding: 1.2rem;
+  font-size: 16px;
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+  backdrop-filter: blur(6px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-weight: 500;
+  width: 180px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #f0f0f0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.developer-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+body:not(.dark) .developer-card {
+  background: rgba(255, 255, 255, 0.9);  /* Almost solid white */
+  color: #2e2e2e;                        /* Slightly soft black for good contrast */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);  /* Subtle elevated feel */
+  border: 1px solid rgba(0, 0, 0, 0.08);       /* Light border to define edges */
+}
+
+
+
+
+
+.developers-section h3 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #827a7a;
+  font-family: 'Segoe UI', 'Helvetica Neue', sans-serif;
+  letter-spacing: 0.5px;
 }

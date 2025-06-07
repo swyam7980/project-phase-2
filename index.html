@@ -8,7 +8,7 @@
 </head>
 <body>
   <header>
-    <div class="logo">Yappr</div>
+    <div class="logo">✎ᝰ.Yappr</div>
     <nav>
       <ul>
         <li><a href="#">Explore</a></li>
@@ -118,69 +118,95 @@
     <div class="footer-logo-text">✎ᝰ.Yappr </div>
   </div>
 
+  <!-- Developers Section -->
+<section class="developers-section">
+
+  <h3>Developers</h3>
+  <div class="developers-grid">
+    <div class="developer-card">Parvathy Padmakumar</div>
+    <div class="developer-card">Swyam Kumar Gupta</div>
+    <div class="developer-card">Meenakshi S</div>
+    <div class="developer-card">Nivedya</div>
+  </div>
+</section>
+
   <footer>
-    <p>© 2025 Yappr. Made for discussion lovers.</p>
+    <p >© 2025 Yappr. Made for discussion lovers.</p>
   </footer>
   <script>
-    const carousel = document.getElementById("topicsCarousel");
-    const wrapper = document.getElementById("carouselWrapper");
-    let isDown = false;
-    let startX;
-    let scrollLeft;
-    let autoScrollInterval;
+  const carousel = document.getElementById("topicsCarousel");
+  const wrapper = document.getElementById("carouselWrapper");
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+  let animationFrameId;
 
-    function startAutoScroll() {
-      stopAutoScroll();
-      autoScrollInterval = setInterval(() => {
-        wrapper.scrollLeft += 1;
-        const singleSetWidth = carousel.scrollWidth / 2;
-        if (wrapper.scrollLeft >= singleSetWidth) {
-          wrapper.scrollLeft -= singleSetWidth;
-        }
-      }, 16);
+  const singleSetWidth = carousel.scrollWidth / 2;
+
+  function startAutoScroll() {
+    stopAutoScroll();
+    function scrollStep() {
+      wrapper.scrollLeft += 0.2;
+      if (wrapper.scrollLeft >= singleSetWidth) {
+        wrapper.scrollLeft -= singleSetWidth;
+      }
+      animationFrameId = requestAnimationFrame(scrollStep);
     }
-    function stopAutoScroll() {
-      if (autoScrollInterval) clearInterval(autoScrollInterval);
+    animationFrameId = requestAnimationFrame(scrollStep);
+  }
+
+  function stopAutoScroll() {
+    cancelAnimationFrame(animationFrameId);
+  }
+
+  function setInitialScroll() {
+    wrapper.scrollLeft = 0;
+  }
+
+  wrapper.addEventListener("mouseenter", stopAutoScroll);
+  wrapper.addEventListener("mouseleave", startAutoScroll);
+
+  wrapper.addEventListener("mousedown", (e) => {
+    isDown = true;
+    startX = e.pageX - wrapper.offsetLeft;
+    scrollLeft = wrapper.scrollLeft;
+    stopAutoScroll();
+  });
+
+  wrapper.addEventListener("mouseleave", () => {
+    isDown = false;
+  });
+
+  wrapper.addEventListener("mouseup", () => {
+    isDown = false;
+    startAutoScroll();  // resume auto-scroll to the right
+  });
+
+  wrapper.addEventListener("mousemove", (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - wrapper.offsetLeft;
+    const walk = (x - startX) * 2;
+    wrapper.scrollLeft = scrollLeft - walk;
+
+    // Seamless looping left
+    if (wrapper.scrollLeft <= 0) {
+      wrapper.scrollLeft += singleSetWidth;
     }
-
-    function setInitialScroll() {
-      wrapper.scrollLeft = 0;
+    // Seamless looping right
+    else if (wrapper.scrollLeft >= singleSetWidth) {
+      wrapper.scrollLeft -= singleSetWidth;
     }
+  });
 
-    wrapper.addEventListener("mouseenter", stopAutoScroll);
-    wrapper.addEventListener("mouseleave", startAutoScroll);
+  window.addEventListener("load", () => {
+    setInitialScroll();
+    startAutoScroll();
+  });
 
-    wrapper.addEventListener("mousedown", (e) => {
-      isDown = true;
-      startX = e.pageX - wrapper.offsetLeft;
-      scrollLeft = wrapper.scrollLeft;
-      stopAutoScroll();
-    });
-
-    wrapper.addEventListener("mouseleave", () => {
-      isDown = false;
-    });
-
-    wrapper.addEventListener("mouseup", () => {
-      isDown = false;
-      startAutoScroll();
-    });
-
-    wrapper.addEventListener("mousemove", (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - wrapper.offsetLeft;
-      const walk = (x - startX) * 2;
-      wrapper.scrollLeft = scrollLeft - walk;
-    });
-
-    window.addEventListener("load", () => {
-      setInitialScroll();
-      startAutoScroll();
-    });
-    window.addEventListener("resize", setInitialScroll);
-  </script>
-  <script>
+  window.addEventListener("resize", setInitialScroll);
+</script>
+ <script>
   const toggleCheckbox = document.getElementById('themeToggleCheckbox');
   const body = document.body;
   const themeLabel = document.getElementById('theme-label');
@@ -199,5 +225,4 @@
     localStorage.setItem("theme", isDark ? "dark" : "light");
   });
 </script>
-
-  
+</body>
