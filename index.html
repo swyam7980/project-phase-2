@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Yappr - Where Opinions Converge</title>
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="loginstyle.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+
 </head>
 <body>
   <header>
@@ -19,10 +22,8 @@
   </nav>
   <div class="right-buttons">
    <div class="auth-buttons">
-    <button class="btn login">Log In</button>
-    <button class="btn signup">Sign Up</button>
-   </div>
-   <div class="theme-switch-wrapper">
+<button class="btn auth" onclick="openAuthModal()">Sign Up/Log In</button>   
+<div class="theme-switch-wrapper">
     <label class="theme-switch">
       <input type="checkbox" id="themeToggleCheckbox">
       <span class="slider">
@@ -133,6 +134,40 @@
   <footer>
     <p >© 2025 Yappr. Made for discussion lovers.</p>
   </footer>
+      
+ <!-- Unified Auth Modal -->
+<div id="main-auth-modal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+    <h2 id="authModalTitle">Log In</h2>
+    <form id="main-login-form">
+      <label for="main-username">Username</label>
+      <input type="text" id="main-username" placeholder="Enter your username" required />
+
+      <label for="main-password">Password</label>
+      <input type="password" id="main-password" placeholder="Enter your password" required />
+
+      <button type="submit">Login</button>
+      <p class="toggle-text">Don’t have an account? <a href="#" id="showSignup">Sign up here</a></p>
+    </form>
+    <form id="main-signup-form" style="display:none;">
+      <label for="main-new-username">Username</label>
+      <input type="text" id="main-new-username" placeholder="Choose a username" required />
+
+      <label for="main-new-password">Password</label>
+      <input type="password" id="main-new-password" placeholder="Create a password" required />
+
+      <label for="main-confirm-password">Confirm Password</label>
+      <input type="password" id="main-confirm-password" placeholder="Confirm your password" required />
+
+      <button type="submit">Sign Up</button>
+      <p class="toggle-text">Already have an account? <a href="#" id="showLogin">Log in here</a></p>
+    </form>
+  </div>
+</div>
+<script src="loginscript.js"></script>
+
+</body>
   <script>
   const carousel = document.getElementById("topicsCarousel");
   const wrapper = document.getElementById("carouselWrapper");
@@ -224,5 +259,5 @@
     themeLabel.textContent = isDark ? "DARK" : "LIGHT";
     localStorage.setItem("theme", isDark ? "dark" : "light");
   });
+
 </script>
-</body>

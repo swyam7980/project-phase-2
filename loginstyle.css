@@ -1,0 +1,208 @@
+* {
+  box-sizing: border-box;
+}
+#main-auth-modal {
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  transition: background 0.5s ease, color 0.5s ease;
+}
+/* === DARK MODE === */
+body.dark #main-auth-modal {
+  background: linear-gradient(to right, #1f1c2c, #928dab);
+  color: #ffffff;
+}
+body.dark #main-auth-modal .login-box {
+  background-color: rgba(30, 30, 30, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+body.dark #main-auth-modal input {
+  background-color: #2e2a3b;
+  border: 1.5px solid #928dab;
+  color: #ffffff;
+}
+body.dark #main-auth-modal button {
+  background: linear-gradient(to right, #ff6a00, #ee0979);
+  color: white;
+}
+body.dark #main-auth-modal .toggle-text a {
+  color: #fcb69f;
+}
+
+/* === LIGHT MODE === */
+body.light #main-auth-modal {
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  color: #333;
+}
+body.light #main-auth-modal .login-box {
+  background-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 10px 30px rgba(100, 100, 100, 0.2);
+}
+body.light #main-auth-modal input {
+  background-color: #f8e9dc;
+  border: 1.5px solid #fcb69f;
+  color: #333;
+}
+body.light #main-auth-modal button {
+  background: linear-gradient(to right, #00c9ff, #92fe9d);
+  color: #333;
+}
+body.light #main-auth-modal .toggle-text a {
+  color: #c94b4b;
+}
+/* === Shared Styles === */
+#main-auth-modal .container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+#main-auth-modal .login-box {
+  border-radius: 20px;
+  padding: 30px 25px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+#main-auth-modal .title {
+  font-size: 28px;
+  margin-bottom: 25px;
+  text-align: center;
+  letter-spacing: 1.5px;
+}
+#main-auth-modal form label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+#main-auth-modal form input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: border-color 0.3s;
+}
+#main-auth-modal form button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+#main-auth-modal form button:hover {
+  transform: scale(1.03);
+  opacity: 0.95;
+}
+#main-auth-modal .toggle-text {
+  text-align: center;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+/* === Toggle Switch === */
+#main-auth-modal .theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+}
+#main-auth-modal .switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+#main-auth-modal .switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* === Modal === */
+#main-auth-modal.modal {
+  display: none; 
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%; 
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6); 
+  backdrop-filter: blur(3px);
+}
+#main-auth-modal .modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+  animation: slideDown 0.4s ease;
+  color: #000;
+}
+body.dark #main-auth-modal .modal-content {
+  background-color: #2e2a3b;
+  color: #fff;
+  border: 1.5px solid #928dab;
+}
+body.light #main-auth-modal .modal-content {
+  background-color: #ffffff;
+  color: #333;
+}
+#main-auth-modal .modal-content input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  font-size: 15px;
+  border: 1.5px solid #ccc;
+}
+body.dark #main-auth-modal .modal-content input {
+  background-color: #1f1c2c;
+  color: #fff;
+  border: 1.5px solid #928dab;
+}
+body.light #main-auth-modal .modal-content input {
+  background-color: #f8e9dc;
+  color: #333;
+}
+#main-auth-modal .modal-content button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  background: linear-gradient(to right, #ff6a00, #ee0979);
+  color: #fff;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+#main-auth-modal .modal-content button:hover {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
+#main-auth-modal .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+/* Modal animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-60px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
