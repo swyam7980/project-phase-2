@@ -151,10 +151,11 @@
         const input = document.getElementById('new-post-input');
         const content = input.value.trim();
         if (!content || !currentChannel) return;
+        const username = localStorage.getItem('username') || 'Guest';
         await fetch('http://localhost:5000/api/posts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content, channel: currentChannel })
+            body: JSON.stringify({ content, channel: currentChannel, username })
         });
         input.value = '';
         fetchPosts();
@@ -224,6 +225,10 @@
         `).join('');
     }
     window.onload = async () => {
+        // Set username in profile section if available
+        const username = localStorage.getItem('username') || 'Guest';
+        const profileName = document.querySelector('.profile-name');
+        if (profileName) profileName.textContent = username;
         updateChannelIndicator();
         renderOnlineUsers();
         if (!currentChannel) {
