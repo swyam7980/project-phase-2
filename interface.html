@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum Interface</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar-left">
+            <div class="profile-section">
+                <span class="profile-avatar"><img src="https://randomuser.me/api/portraits/lego/1.jpg" alt="Profile" /></span>
+                <span class="profile-name">Guest</span>
+            </div>
+            <div class="channels" id="channels-list">
+                <div class="channel expanded" data-category="General">
+                    <div class="channel-title" onclick="toggleChannel(this)">
+                        # General
+                        <span class="channel-arrow">&#9654;</span>
+                    </div>
+                    <div class="topics">
+                        <div class="topic" data-channel="Introductions" onclick="selectChannel(this, event)">Introductions</div>
+                        <div class="topic" data-channel="Announcements" onclick="selectChannel(this, event)">Announcements</div>
+                    </div>
+                </div>
+                <div class="channel expanded" data-category="Development">
+                    <div class="channel-title" onclick="toggleChannel(this)">
+                        # Development
+                        <span class="channel-arrow">&#9654;</span>
+                    </div>
+                    <div class="topics">
+                        <div class="topic" data-channel="Frontend" onclick="selectChannel(this, event)">Frontend</div>
+                        <div class="topic" data-channel="Backend" onclick="selectChannel(this, event)">Backend</div>
+                        <div class="topic" data-channel="APIs" onclick="selectChannel(this, event)">APIs</div>
+                    </div>
+                </div>
+                <div class="channel expanded" data-category="Off-topic">
+                    <div class="channel-title" onclick="toggleChannel(this)">
+                        # Off-topic
+                        <span class="channel-arrow">&#9654;</span>
+                    </div>
+                    <div class="topics">
+                        <div class="topic" data-channel="Memes" onclick="selectChannel(this, event)">Memes</div>
+                        <div class="topic" data-channel="Random" onclick="selectChannel(this, event)">Random</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="posts" id="posts-container">
+                <!-- Posts will be rendered here by JS -->
+            </div>
+            <div class="new-post-box">
+                <textarea class="new-post-input" id="new-post-input" placeholder="Write a new post..." rows="2" onkeydown="handleInputKey(event)"></textarea>
+                <button class="new-post-btn" onclick="createPost()">Post</button>
+            </div>
+        </main>
+        <aside class="sidebar-right">
+            <div class="sidebar-right-top">
+                <div class="theme-switch-wrapper">
+                  <label class="theme-switch">
+                    <input type="checkbox" id="themeToggleCheckbox">
+                    <span class="slider">
+                      <span class="icon sun">☀︎</span>
+                      <span class="icon moon">‧⏾</span>
+                    </span>
+                  </label>
+                  <span class="theme-label" id="theme-label">LIGHT</span>
+                </div>
+            </div>
+            <div class="active-users">
+                <div class="user">
+                    <span class="user-avatar"><img src="https://randomuser.me/api/portraits/lego/1.jpg" alt="Alice" /></span>
+                    <span class="user-name">Alice</span>
+                </div>
+                <div class="user">
+                    <span class="user-avatar"><img src="https://randomuser.me/api/portraits/lego/2.jpg" alt="Bob" /></span>
+                    <span class="user-name">Bob</span>
+                </div>
+                <div class="user">
+                    <span class="user-avatar"><img src="https://randomuser.me/api/portraits/lego/3.jpg" alt="Charlie" /></span>
+                    <span class="user-name">Charlie</span>
+                </div>
+                <div class="user">
+                    <span class="user-avatar"><img src="https://randomuser.me/api/portraits/lego/4.jpg" alt="Dana" /></span>
+                    <span class="user-name">Dana</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+    <script>
+    let currentChannel = null;
+    function updateChannelIndicator() {
+        document.querySelectorAll('.topic').forEach(el => el.classList.remove('selected-channel'));
+        if (currentChannel) {
+            const selected = document.querySelector(`.topic[data-channel="${currentChannel}"]`);
+            if (selected) selected.classList.add('selected-channel');
+        }
+    }
+    function toggleChannel(titleElem) {
+        const channel = titleElem.parentElement;
+        const isExpanded = channel.classList.contains('expanded');
+        channel.classList.toggle('expanded', !isExpanded);
+        channel.classList.toggle('collapsed', isExpanded);
+    }
+    function selectChannel(elem, event) {
+        if (event) event.stopPropagation();
+        currentChannel = elem.getAttribute('data-channel');
+        updateChannelIndicator();
+        fetchPosts();
+    }
+    async function fetchPosts() {
+        if (!currentChannel) {
+            document.getElementById('posts-container').innerHTML = '<div style="color:#888;text-align:center;margin-top:2em;">Select a channel to view posts.</div>';
+            return;
+        }
+        const res = await fetch(`http://localhost:5000/api/posts?channel=${encodeURIComponent(currentChannel)}`);
+        const posts = await res.json();
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = '';
+        posts.forEach(post => {
+            postsContainer.innerHTML += `
+                <div class="post">
+                    <div class="post-header">
+                        <span class="post-username">${post.username || 'Guest'}</span>
+                        <span class="post-time">${timeAgo(post.createdAt)}</span>
+                        <button class="delete-btn" onclick="deletePost('${post._id}')">🗑️</button>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    <div class="post-actions">
+                        <button class="upvote" onclick="upvotePost('${post._id}')">▲ ${post.upvotes}</button>
+                        <button class="downvote" onclick="downvotePost('${post._id}')">▼ ${post.downvotes}</button>
+                    </div>
+                    <div class="comments">
+                        ${(post.comments||[]).map(c => `<div class='comment'>${c.content}</div>`).join('')}
+                    </div>
+                </div>
+            `;
+        });
+    }
+    function timeAgo(date) {
+        const now = new Date();
+        const then = new Date(date);
+        const diff = Math.floor((now - then) / 60000);
+        if (diff < 1) return 'just now';
+        if (diff < 60) return diff + ' min ago';
+        return then.toLocaleString();
+    }
+    async function createPost() {
+        const input = document.getElementById('new-post-input');
+        const content = input.value.trim();
+        if (!content || !currentChannel) return;
+        await fetch('http://localhost:5000/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content, channel: currentChannel })
+        });
+        input.value = '';
+        fetchPosts();
+    }
+    async function upvotePost(id) {
+        await fetch(`http://localhost:5000/api/posts/${id}/upvote`, { method: 'POST' });
+        fetchPosts();
+    }
+    async function downvotePost(id) {
+        await fetch(`http://localhost:5000/api/posts/${id}/downvote`, { method: 'POST' });
+        fetchPosts();
+    }
+    async function deletePost(id) {
+        await fetch(`http://localhost:5000/api/posts/${id}`, { method: 'DELETE' });
+        fetchPosts();
+    }
+    function handleInputKey(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            createPost();
+        }
+    }
+    async function fetchPopularChannels() {
+        // Get all posts to count per channel
+        const res = await fetch('http://localhost:5000/api/posts?all=1');
+        const posts = await res.json();
+        const counts = {};
+        posts.forEach(p => { counts[p.channel] = (counts[p.channel]||0)+1; });
+        // List of all possible channels (update as needed)
+        const allChannels = [
+            'Introductions', 'Announcements', 'Frontend', 'Backend', 'APIs', 'Memes', 'Random'
+        ];
+        const popular = allChannels.map(name => ({ name, posts: counts[name]||0 }));
+        return popular.sort((a,b) => b.posts - a.posts);
+    }
+    function renderPopularChannels(channels) {
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = `<div style="margin:2em auto;max-width:400px;">
+            <h2 style='color:#5865f2;text-align:center;'>Popular Channels</h2>
+            <ul class='popular-channels-list' style='list-style:none;padding:0;'>
+                ${channels.map(c => `<li style='margin:12px 0;padding:10px 16px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;' onclick="selectPopularChannel('${c.name}')">
+                    <span>${c.name}</span><span style='color:#aaa;'>${c.posts} posts</span>
+                </li>`).join('')}
+            </ul>
+        </div>`;
+    }
+    function selectPopularChannel(channelName) {
+        currentChannel = channelName;
+        updateChannelIndicator();
+        fetchPosts();
+    }
+    function renderOnlineUsers() {
+        // For demo: hardcoded users, could be fetched from backend if you add user logic
+        const users = [
+            { name: 'Alice' },
+            { name: 'Bob' },
+            { name: 'Charlie' },
+            { name: 'Dana' }
+        ];
+        const usersContainer = document.querySelector('.active-users');
+        usersContainer.innerHTML = users.map(u => `
+            <div class="user">
+                <span class="user-avatar"><img src="https://randomuser.me/api/portraits/lego/${u.name==='Alice'?1:u.name==='Bob'?2:u.name==='Charlie'?3:u.name==='Dana'?4:5}.jpg" alt="${u.name}" /></span>
+                <span class="user-name">${u.name}</span>
+                <span class="user-status online">●</span>
+            </div>
+        `).join('');
+    }
+    window.onload = async () => {
+        updateChannelIndicator();
+        renderOnlineUsers();
+        if (!currentChannel) {
+            const popular = await fetchPopularChannels();
+            renderPopularChannels(popular);
+        } else {
+            fetchPosts();
+        }
+    };
+    // Theme toggle logic
+const toggleCheckbox = document.getElementById('themeToggleCheckbox');
+const body = document.body;
+const themeLabel = document.getElementById('theme-label');
+if (localStorage.getItem("theme") === "dark") {
+  body.classList.add("dark");
+  toggleCheckbox.checked = true;
+  themeLabel.textContent = "DARK";
+}
+toggleCheckbox.addEventListener('change', () => {
+  body.classList.toggle('dark');
+  const isDark = body.classList.contains('dark');
+  themeLabel.textContent = isDark ? "DARK" : "LIGHT";
+  localStorage.setItem("theme", isDark ? "dark" : "light");
+});
+window.addEventListener('DOMContentLoaded', () => {
+  const wrappers = document.querySelectorAll('.theme-switch-wrapper');
+  if (wrappers.length > 1) {
+    wrappers.forEach((el, i) => { if (i !== 1) el.remove(); });
+  }
+});
+    </script>
+</body>
+</html>
