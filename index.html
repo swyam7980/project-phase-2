@@ -14,10 +14,10 @@
     <div class="logo">✎ᝰ.Yappr</div>
     <nav>
       <ul>
-        <li><a href="#">Explore</a></li>
-        <li><a href="#">Topics</a></li>
-        <li><a href="#">Trending</a></li>
-        <li><a href="#">New</a></li>
+        <li><a href="populartopics.html">Explore</a></li>
+        <li><a href="populartopics.html">Topics</a></li>
+        <li><a href="populartopics.html">Trending</a></li>
+        <li><a href="populartopics.html">New</a></li>
       </ul>
   </nav>
   <div class="right-buttons">
@@ -39,8 +39,7 @@
     <h1 style="font-style: oblique;">We create a community that is open to your opinions</h1>
     <p style="font-size: 20px; font-style: oblique;">Yappr - Where Opinions Converge</p>
     <p>Join the community on discussions sharing ideas, debates, and interests – one thread at a time.</p>
-    <button class="btn primary">Start a Topic</button>
-  </section>
+<button class="btn primary" onclick="location.href='populartopics.html'">Start a Topic</button>  </section>
 
   <!-- Top Channels Carousel -->
   <section class="topics-preview">
@@ -66,7 +65,7 @@
 
   <section class="call-to-action">
     <h2>Ready to join Yappr?</h2>
-    <button class="btn secondary">Create an Account</button>
+    <button class="btn secondary" onclick="openAuthModal()">Create an Account</button>
   </section>
 
   <!-- Carousel of Communities -->
@@ -165,9 +164,10 @@
     </form>
   </div>
 </div>
-<script src="loginscript.js"></script>
 
+<script src="loginscript.js"></script>
 </body>
+
   <script>
   const carousel = document.getElementById("topicsCarousel");
   const wrapper = document.getElementById("carouselWrapper");
