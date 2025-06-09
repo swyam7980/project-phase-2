@@ -248,7 +248,7 @@ function createTopicCard(topic) {
     `;
 
     card.addEventListener('click', () => {
-        console.log(`Clicked on topic: ${topic.title}`);
+        window.location.href = 'interface.html';
     });
 
     return card;

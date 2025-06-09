@@ -41,71 +41,70 @@ window.onclick = function(event) {
   }
 };
 
-// Prevent form submission (demo only)
-document.getElementById('main-login-form').onsubmit = async function(e) {
-  e.preventDefault();
-  const username = document.getElementById('main-username').value.trim();
-  const password = document.getElementById('main-password').value;
-  const loginBtn = this.querySelector('button[type="submit"]');
-  loginBtn.disabled = true;
-  loginBtn.textContent = 'Logging in...';
-  try {
-    const res = await fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.success) {
-      localStorage.setItem('username', username);
-      loginBtn.textContent = 'Success! Redirecting...';
-      setTimeout(() => { window.location.href = 'interface.html'; }, 700);
-    } else {
-      alert(data.error || 'Login failed');
-      loginBtn.textContent = 'Login';
-      loginBtn.disabled = false;
+// --- LocalStorage User Auth ---
+function getUsers() {
+    return JSON.parse(localStorage.getItem('users') || '[]');
+}
+function saveUsers(users) {
+    localStorage.setItem('users', JSON.stringify(users));
+}
+function signup(username, password) {
+    const users = getUsers();
+    if (users.find(u => u.username === username)) {
+        return { success: false, error: 'Username already exists' };
     }
-  } catch (err) {
-    alert('Network error');
-    loginBtn.textContent = 'Login';
-    loginBtn.disabled = false;
-  }
-};
+    users.push({ username, password });
+    saveUsers(users);
+    localStorage.setItem('username', username);
+    return { success: true };
+}
+function login(username, password) {
+    const users = getUsers();
+    const user = users.find(u => u.username === username && u.password === password);
+    if (user) {
+        localStorage.setItem('username', username);
+        return { success: true };
+    }
+    return { success: false, error: 'Invalid credentials' };
+}
 
-document.getElementById('main-signup-form').onsubmit = async function(e) {
-  e.preventDefault();
-  const username = document.getElementById('main-new-username').value.trim();
-  const password = document.getElementById('main-new-password').value;
-  const confirm = document.getElementById('main-confirm-password').value;
-  const signupBtn = this.querySelector('button[type="submit"]');
-  signupBtn.disabled = true;
-  signupBtn.textContent = 'Signing up...';
-  if (password !== confirm) {
-    alert('Passwords do not match');
-    signupBtn.textContent = 'Sign Up';
-    signupBtn.disabled = false;
-    return;
-  }
-  try {
-    const res = await fetch('http://localhost:5000/api/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
-    });
-    const data = await res.json();
-    if (data.success) {
-      alert('Signup successful! Please log in.');
-      document.getElementById('main-login-form').style.display = 'block';
-      document.getElementById('main-signup-form').style.display = 'none';
-      document.getElementById('authModalTitle').textContent = 'Log In';
+// Redirect to forum page
+function redirectToForum() {
+    window.location.href = 'interface.html';
+}
+
+// After successful login/signup, redirect to forum
+function handleLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('login-username').value.trim();
+    const password = document.getElementById('login-password').value;
+    const result = login(username, password);
+    if (result.success) {
+        localStorage.setItem('username', username);
+        redirectToForum();
     } else {
-      alert(data.error || 'Signup failed');
+        showLoginError(result.error);
     }
-    signupBtn.textContent = 'Sign Up';
-    signupBtn.disabled = false;
-  } catch (err) {
-    alert('Network error');
-    signupBtn.textContent = 'Sign Up';
-    signupBtn.disabled = false;
-  }
-};
+}
+function handleSignup(event) {
+    event.preventDefault();
+    const username = document.getElementById('signup-username').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const result = signup(username, password);
+    if (result.success) {
+        localStorage.setItem('username', username);
+        redirectToForum();
+    } else {
+        showSignupError(result.error);
+    }
+}
+
+// Attach handlers if login/signup forms exist
+window.addEventListener('DOMContentLoaded', () => {
+    if (document.getElementById('login-form')) {
+        document.getElementById('login-form').onsubmit = handleLogin;
+    }
+    if (document.getElementById('signup-form')) {
+        document.getElementById('signup-form').onsubmit = handleSignup;
+    }
+});

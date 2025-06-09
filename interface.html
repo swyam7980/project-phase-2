@@ -91,6 +91,10 @@
         </aside>
     </div>
     <script>
+    // Remove all fetch calls to backend endpoints (for static hosting)
+    // All forum logic is now handled in JS using localStorage
+    // No server required
+
     let currentChannel = null;
     function updateChannelIndicator() {
         document.querySelectorAll('.topic').forEach(el => el.classList.remove('selected-channel'));
@@ -111,15 +115,33 @@
         updateChannelIndicator();
         fetchPosts();
     }
+    // --- LocalStorage Utilities ---
+    function getPosts() {
+        return JSON.parse(localStorage.getItem('posts') || '[]');
+    }
+    function savePosts(posts) {
+        localStorage.setItem('posts', JSON.stringify(posts));
+    }
+    function generateId() {
+        return '_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // --- Refactored Forum Logic ---
     async function fetchPosts() {
         if (!currentChannel) {
             document.getElementById('posts-container').innerHTML = '<div style="color:#888;text-align:center;margin-top:2em;">Select a channel to view posts.</div>';
             return;
         }
-        const res = await fetch(`http://localhost:5000/api/posts?channel=${encodeURIComponent(currentChannel)}`);
-        const posts = await res.json();
+        // Fix: Use exact string match for channel (case and whitespace sensitive)
+        const posts = getPosts()
+            .filter(p => p.channel === currentChannel)
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         const postsContainer = document.getElementById('posts-container');
         postsContainer.innerHTML = '';
+        if (posts.length === 0) {
+            postsContainer.innerHTML = '<div style="color:#888;text-align:center;margin-top:2em;">No posts in this channel yet.</div>';
+            return;
+        }
         posts.forEach(post => {
             postsContainer.innerHTML += `
                 <div class="post">
@@ -140,52 +162,51 @@
             `;
         });
     }
-    function timeAgo(date) {
-        const now = new Date();
-        const then = new Date(date);
-        const diff = Math.floor((now - then) / 60000);
-        if (diff < 1) return 'just now';
-        if (diff < 60) return diff + ' min ago';
-        return then.toLocaleString();
-    }
     async function createPost() {
         const input = document.getElementById('new-post-input');
         const content = input.value.trim();
         if (!content || !currentChannel) return;
         const username = localStorage.getItem('username') || 'Guest';
-        await fetch('http://localhost:5000/api/posts', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ content, channel: currentChannel, username })
+        const posts = getPosts();
+        // Save channel as exactly currentChannel for consistency
+        posts.push({
+            _id: generateId(),
+            content,
+            channel: currentChannel,
+            username,
+            upvotes: 0,
+            downvotes: 0,
+            createdAt: new Date().toISOString(),
+            comments: []
         });
+        savePosts(posts);
         input.value = '';
         fetchPosts();
     }
     async function upvotePost(id) {
-        await fetch(`http://localhost:5000/api/posts/${id}/upvote`, { method: 'POST' });
+        const posts = getPosts();
+        const post = posts.find(p => p._id === id);
+        if (post) post.upvotes++;
+        savePosts(posts);
         fetchPosts();
     }
     async function downvotePost(id) {
-        await fetch(`http://localhost:5000/api/posts/${id}/downvote`, { method: 'POST' });
+        const posts = getPosts();
+        const post = posts.find(p => p._id === id);
+        if (post) post.downvotes++;
+        savePosts(posts);
         fetchPosts();
     }
     async function deletePost(id) {
-        await fetch(`http://localhost:5000/api/posts/${id}`, { method: 'DELETE' });
+        let posts = getPosts();
+        posts = posts.filter(p => p._id !== id);
+        savePosts(posts);
         fetchPosts();
     }
-    function handleInputKey(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            createPost();
-        }
-    }
     async function fetchPopularChannels() {
-        // Get all posts to count per channel
-        const res = await fetch('http://localhost:5000/api/posts?all=1');
-        const posts = await res.json();
+        const posts = getPosts();
         const counts = {};
         posts.forEach(p => { counts[p.channel] = (counts[p.channel]||0)+1; });
-        // List of all possible channels (update as needed)
         const allChannels = [
             'Introductions', 'Announcements', 'Frontend', 'Backend', 'APIs', 'Memes', 'Random'
         ];
@@ -225,8 +246,8 @@
             </div>
         `).join('');
     }
+    // On page load, set username in profile section from localStorage
     window.onload = async () => {
-        // Set username in profile section if available
         const username = localStorage.getItem('username') || 'Guest';
         const profileName = document.querySelector('.profile-name');
         if (profileName) profileName.textContent = username;
@@ -260,6 +281,14 @@ window.addEventListener('DOMContentLoaded', () => {
     wrappers.forEach((el, i) => { if (i !== 1) el.remove(); });
   }
 });
+function timeAgo(date) {
+    const now = new Date();
+    const then = new Date(date);
+    const diff = Math.floor((now - then) / 60000);
+    if (diff < 1) return 'just now';
+    if (diff < 60) return diff + ' min ago';
+    return then.toLocaleString();
+}
     </script>
 </body>
 </html>

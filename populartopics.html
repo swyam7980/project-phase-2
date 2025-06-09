@@ -90,5 +90,25 @@
 </div>
 </div>
     <script src="populartopics_script.js"></script>
+    <script>
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            // Add Home button if not present
+            if (!document.getElementById('home-btn')) {
+                const container = document.querySelector('.container');
+                if (container) {
+                    const homeBtn = document.createElement('button');
+                    homeBtn.id = 'home-btn';
+                    homeBtn.textContent = '🏠 Home';
+                    homeBtn.className = 'home-btn';
+                    homeBtn.style = 'margin: 16px 0 24px 0; width: 120px; padding: 10px; border-radius: 8px; background: #5865f2; color: #fff; border: none; font-size: 1rem; cursor: pointer;';
+                    homeBtn.onclick = goHome;
+                    container.insertBefore(homeBtn, container.firstChild.nextSibling);
+                }
+            }
+        });
+    </script>
 </body>
 </html>
