@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Popular Topics – YappR!</title>
+  <link rel="stylesheet" href="populartopics_styles.css"/>
+</head>
+<body>
+<div class="popular">
+  <div class="container">
+    <div class="header">
+      <h1>Popular Topics</h1>
+      <p>Discover what's trending in our community</p>
+      <label class="theme-switch">
+        <input type="checkbox" id="popularThemeToggle"/>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+        <div class="controls">
+            <div class="search-container">
+                <input type="text" class="search-bar" placeholder="Search popular topics..." id="searchInput">
+                <div class="search-icon">🔍</div>
+            </div>
+            
+            <div class="filter-group">
+                <button class="filter-btn active" data-time="all">All Time</button>
+                <button class="filter-btn" data-time="today">Today</button>
+                <button class="filter-btn" data-time="week">This Week</button>
+                <button class="filter-btn" data-time="month">This Month</button>
+            </div>
+
+            <div class="filter-group">
+                <button class="sort-btn active" data-sort="discussed">Most Discussed</button>
+                <button class="sort-btn" data-sort="liked">Most Liked</button>
+                <button class="sort-btn" data-sort="recent">Recently Updated</button>
+                <button class="sort-btn" data-sort="new">Recently Created</button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="topics-grid" id="topicsGrid"> </div>
+
+            <div class="sidebar">
+                <h3>🏷️ Popular Tags</h3>
+                <div class="tag-cloud">
+                    <span class="tag">#AI</span>
+                    <span class="tag">#Design</span>
+                    <span class="tag">#MentalHealth</span>
+                    <span class="tag">#Programming</span>
+                    <span class="tag">#Startup</span>
+                    <span class="tag">#Photography</span>
+                    <span class="tag">#Fitness</span>
+                    <span class="tag">#Travel</span>
+                    <span class="tag">#Books</span>
+                    <span class="tag">#Music</span>
+                </div>
+
+                <h3>📁 Categories</h3>
+                <ul class="categories">
+                    <li class="category-item">
+                        <span>Technology</span>
+                        <span class="category-count">1.2k</span>
+                    </li>
+                    <li class="category-item">
+                        <span>Art & Design</span>
+                        <span class="category-count">856</span>
+                    </li>
+                    <li class="category-item">
+                        <span>Health & Wellness</span>
+                        <span class="category-count">642</span>
+                    </li>
+                    <li class="category-item">
+                        <span>Business</span>
+                        <span class="category-count">534</span>
+                    </li>
+                    <li class="category-item">
+                        <span>Entertainment</span>
+                        <span class="category-count">423</span>
+                    </li>
+                    <li class="category-item">
+                        <span>Education</span>
+                        <span class="category-count">387</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+    <script src="populartopics_script.js"></script>
+</body>
+</html>
