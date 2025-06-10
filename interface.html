@@ -125,6 +125,72 @@
     function generateId() {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
+    // Pre-populate localStorage with default posts if empty
+    function initializeDefaultPosts() {
+        if (!localStorage.getItem('posts') || getPosts().length === 0) {
+            const defaultPosts = [
+                {
+                    _id: generateId(),
+                    content: 'Welcome to Yappr! Introduce yourself and say hi!',
+                    channel: 'Introductions',
+                    username: 'Admin',
+                    upvotes: 3,
+                    downvotes: 0,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+                    comments: [
+                        { content: 'Hello everyone!' },
+                        { content: 'Glad to be here!' }
+                    ]
+                },
+                {
+                    _id: generateId(),
+                    content: 'What are your favorite frontend frameworks?',
+                    channel: 'Frontend',
+                    username: 'Alice',
+                    upvotes: 5,
+                    downvotes: 1,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+                    comments: [
+                        { content: 'React all the way!' },
+                        { content: 'Vue is awesome.' }
+                    ]
+                },
+                {
+                    _id: generateId(),
+                    content: 'Share your best programming memes!',
+                    channel: 'Memes',
+                    username: 'Bob',
+                    upvotes: 7,
+                    downvotes: 0,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 12).toISOString(),
+                    comments: [
+                        { content: 'Here for the laughs!' }
+                    ]
+                },
+                {
+                    _id: generateId(),
+                    content: 'API design tips and best practices?',
+                    channel: 'APIs',
+                    username: 'Charlie',
+                    upvotes: 2,
+                    downvotes: 0,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 6).toISOString(),
+                    comments: []
+                },
+                {
+                    _id: generateId(),
+                    content: 'Random thoughts of the day!',
+                    channel: 'Random',
+                    username: 'Dana',
+                    upvotes: 1,
+                    downvotes: 0,
+                    createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+                    comments: []
+                }
+            ];
+            savePosts(defaultPosts);
+        }
+    }
 
     // --- Refactored Forum Logic ---
     async function fetchPosts() {
@@ -248,6 +314,7 @@
     }
     // On page load, set username in profile section from localStorage
     window.onload = async () => {
+        initializeDefaultPosts();
         const username = localStorage.getItem('username') || 'Guest';
         const profileName = document.querySelector('.profile-name');
         if (profileName) profileName.textContent = username;
