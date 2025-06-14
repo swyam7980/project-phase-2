@@ -91,10 +91,6 @@
         </aside>
     </div>
     <script>
-    // Remove all fetch calls to backend endpoints (for static hosting)
-    // All forum logic is now handled in JS using localStorage
-    // No server required
-
     let currentChannel = null;
     function updateChannelIndicator() {
         document.querySelectorAll('.topic').forEach(el => el.classList.remove('selected-channel'));
@@ -115,7 +111,6 @@
         updateChannelIndicator();
         fetchPosts();
     }
-    // --- LocalStorage Utilities ---
     function getPosts() {
         return JSON.parse(localStorage.getItem('posts') || '[]');
     }
@@ -125,7 +120,6 @@
     function generateId() {
         return '_' + Math.random().toString(36).substr(2, 9);
     }
-    // Pre-populate localStorage with default posts if empty
     function initializeDefaultPosts() {
         if (!localStorage.getItem('posts') || getPosts().length === 0) {
             const defaultPosts = [
@@ -192,13 +186,11 @@
         }
     }
 
-    // --- Refactored Forum Logic ---
     async function fetchPosts() {
         if (!currentChannel) {
             document.getElementById('posts-container').innerHTML = '<div style="color:#888;text-align:center;margin-top:2em;">Select a channel to view posts.</div>';
             return;
         }
-        // Fix: Use exact string match for channel (case and whitespace sensitive)
         const posts = getPosts()
             .filter(p => p.channel === currentChannel)
             .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -234,7 +226,6 @@
         if (!content || !currentChannel) return;
         const username = localStorage.getItem('username') || 'Guest';
         const posts = getPosts();
-        // Save channel as exactly currentChannel for consistency
         posts.push({
             _id: generateId(),
             content,
@@ -296,7 +287,6 @@
         fetchPosts();
     }
     function renderOnlineUsers() {
-        // For demo: hardcoded users, could be fetched from backend if you add user logic
         const users = [
             { name: 'Alice' },
             { name: 'Bob' },
@@ -312,7 +302,6 @@
             </div>
         `).join('');
     }
-    // On page load, set username in profile section from localStorage
     window.onload = async () => {
         initializeDefaultPosts();
         const username = localStorage.getItem('username') || 'Guest';
@@ -327,8 +316,7 @@
             fetchPosts();
         }
     };
-    // Theme toggle logic
-const toggleCheckbox = document.getElementById('themeToggleCheckbox');
+    const toggleCheckbox = document.getElementById('themeToggleCheckbox');
 const body = document.body;
 const themeLabel = document.getElementById('theme-label');
 if (localStorage.getItem("theme") === "dark") {
