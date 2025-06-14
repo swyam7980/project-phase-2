@@ -60,7 +60,7 @@ body.dark .popular .header h1 {
     font-size: 3rem;
     font-weight: 800;
     background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
-    -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
 }
@@ -600,7 +600,7 @@ body.dark .popular .slider {
   display: inline-block;
   cursor: pointer;
   transition: background 0.3s;
-  background: #ffcab0; /* default for light */
+  background: #ffcab0; 
 }
 
 body.dark .popular .slider {
@@ -622,7 +622,7 @@ body.dark .popular .slider::after {
 
 body.light .popular .theme-switch input:checked + .slider,
 body.dark .popular .theme-switch input:checked + .slider {
-  background: #ff7f7f; /* accent for light, adjust for dark if needed */
+  background: #ff7f7f; 
 }
 
 body.light .popular .theme-switch input:checked + .slider::after,
