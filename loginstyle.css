@@ -6,7 +6,6 @@
   font-family: 'Orbitron', sans-serif;
   transition: background 0.5s ease, color 0.5s ease;
 }
-/* === DARK MODE === */
 body.dark #main-auth-modal {
   background: linear-gradient(to right, #1f1c2c, #928dab);
   color: #ffffff;
@@ -28,7 +27,6 @@ body.dark #main-auth-modal .toggle-text a {
   color: #fcb69f;
 }
 
-/* === LIGHT MODE === */
 body.light #main-auth-modal {
   background: linear-gradient(to right, #ffecd2, #fcb69f);
   color: #333;
@@ -49,7 +47,6 @@ body.light #main-auth-modal button {
 body.light #main-auth-modal .toggle-text a {
   color: #c94b4b;
 }
-/* === Shared Styles === */
 #main-auth-modal .container {
   height: 100vh;
   display: flex;
@@ -103,7 +100,6 @@ body.light #main-auth-modal .toggle-text a {
   margin-top: 15px;
 }
 
-/* === Toggle Switch === */
 #main-auth-modal .theme-toggle {
   position: absolute;
   top: 20px;
@@ -121,7 +117,6 @@ body.light #main-auth-modal .toggle-text a {
   height: 0;
 }
 
-/* === Modal === */
 #main-auth-modal.modal {
   display: none; 
   position: fixed;
@@ -195,7 +190,6 @@ body.light #main-auth-modal .modal-content input {
   cursor: pointer;
 }
 
-/* Modal animation */
 @keyframes slideDown {
   from {
     transform: translateY(-60px);

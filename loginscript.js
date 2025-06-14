@@ -4,7 +4,6 @@ function mainToggleTheme() {
   body.classList.toggle("light");
 }
 
-// Open the unified auth modal
 function openAuthModal() {
   document.getElementById('main-auth-modal').style.display = 'block';
   document.getElementById('main-login-form').style.display = 'block';
@@ -12,12 +11,10 @@ function openAuthModal() {
   document.getElementById('authModalTitle').textContent = 'Log In';
 }
 
-// Close the unified auth modal
 function closeAuthModal() {
   document.getElementById('main-auth-modal').style.display = 'none';
 }
 
-// Switch to signup form
 document.getElementById('showSignup').onclick = function(e) {
   e.preventDefault();
   document.getElementById('main-login-form').style.display = 'none';
@@ -25,7 +22,6 @@ document.getElementById('showSignup').onclick = function(e) {
   document.getElementById('authModalTitle').textContent = 'Sign Up';
 };
 
-// Switch to login form
 document.getElementById('showLogin').onclick = function(e) {
   e.preventDefault();
   document.getElementById('main-login-form').style.display = 'block';
@@ -33,7 +29,6 @@ document.getElementById('showLogin').onclick = function(e) {
   document.getElementById('authModalTitle').textContent = 'Log In';
 };
 
-// Close modal when clicking outside
 window.onclick = function(event) {
   const modal = document.getElementById("main-auth-modal");
   if (event.target === modal) {
@@ -41,7 +36,6 @@ window.onclick = function(event) {
   }
 };
 
-// --- LocalStorage User Auth ---
 function getUsers() {
     return JSON.parse(localStorage.getItem('users') || '[]');
 }
@@ -68,12 +62,10 @@ function login(username, password) {
     return { success: false, error: 'Invalid credentials' };
 }
 
-// Redirect to forum page
 function redirectToForum() {
     window.location.href = 'interface.html';
 }
 
-// After successful login/signup, redirect to forum
 function handleLogin(event) {
     event.preventDefault();
     const username = document.getElementById('login-username').value.trim();
@@ -99,7 +91,6 @@ function handleSignup(event) {
     }
 }
 
-// Attach handlers if login/signup forms exist
 window.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('login-form')) {
         document.getElementById('login-form').onsubmit = handleLogin;

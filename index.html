@@ -51,7 +51,6 @@
         <div class="topic-card">🎨 Art & Design<br><span>Share your creations, get feedback.</span></div>
         <div class="topic-card">🏃 Lifestyle<br><span>Share your routines, improve lifestyles.</span></div>
         <div class="topic-card">👠 Fashion<br><span>Style dresses, discuss trending fashion statements.</span></div>
-        <!-- Duplicate for seamless scroll -->
         <div class="topic-card">📚 Literature<br><span>Deep dives into classic and modern reads.</span></div>
         <div class="topic-card">🎮 Gaming<br><span>Level up your gaming discussions.</span></div>
         <div class="topic-card">💻 Programming<br><span>From Python to Rust, dive into code threads.</span></div>
@@ -207,7 +206,7 @@
 
   wrapper.addEventListener("mouseup", () => {
     isDown = false;
-    startAutoScroll();  // resume auto-scroll to the right
+    startAutoScroll();  
   });
 
   wrapper.addEventListener("mousemove", (e) => {
@@ -217,11 +216,9 @@
     const walk = (x - startX) * 2;
     wrapper.scrollLeft = scrollLeft - walk;
 
-    // Seamless looping left
     if (wrapper.scrollLeft <= 0) {
       wrapper.scrollLeft += singleSetWidth;
     }
-    // Seamless looping right
     else if (wrapper.scrollLeft >= singleSetWidth) {
       wrapper.scrollLeft -= singleSetWidth;
     }
@@ -239,7 +236,6 @@
   const body = document.body;
   const themeLabel = document.getElementById('theme-label');
 
-  // Force light theme by default
   body.classList.add('light');
   body.classList.remove('dark');
   toggleCheckbox.checked = true;

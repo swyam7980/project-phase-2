@@ -1,4 +1,3 @@
-// Sample data
 const topics = [
     {
         id: 1,
@@ -86,22 +85,18 @@ const topics = [
 
 let displayedTopics = [...topics];
 
-// Initialize app
 document.addEventListener('DOMContentLoaded', () => {
     renderTopics(displayedTopics);
     setupEventListeners();
 });
 
-// Event listeners
 function setupEventListeners() {
-    // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             setActiveButton('.filter-btn', e.target);
         });
     });
 
-    // Sort buttons
     document.querySelectorAll('.sort-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             setActiveButton('.sort-btn', e.target);
@@ -109,12 +104,10 @@ function setupEventListeners() {
         });
     });
 
-    // Search
     document.getElementById('searchInput').addEventListener('input', (e) => {
         searchTopics(e.target.value);
     });
 
-    // Tags
     document.querySelectorAll('.tag').forEach(tag => {
         tag.addEventListener('click', (e) => {
             const tagText = e.target.textContent.replace('#', '');
@@ -123,7 +116,6 @@ function setupEventListeners() {
         });
     });
 
-    // Categories
     document.querySelectorAll('.category-item').forEach(item => {
         item.addEventListener('click', (e) => {
             const category = e.target.querySelector('span').textContent;
@@ -132,7 +124,6 @@ function setupEventListeners() {
     });
 }
 
-// Helper functions
 function setActiveButton(selector, activeBtn) {
     document.querySelectorAll(selector).forEach(btn => btn.classList.remove('active'));
     activeBtn.classList.add('active');
@@ -173,7 +164,6 @@ function filterByCategory(category) {
     renderTopics(filtered);
 }
 
-// Render topics
 function renderTopics(topicsToRender) {
     const grid = document.getElementById('topicsGrid');
     grid.innerHTML = '';
